@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block body %}
+    <div class="row my-5">
+        <div class="col-md-10 mx-auto">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{message}}
+                </div>
+            {% endfor %}
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>List of products</span>
+                    <a href="{{path('product_store')}}" class="btn btn-sm btn-primary">
+                        Add
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                                <tr>
+                                    <td>{{loop.index}}</td>
+                                    <td>{{product.name}}</td>
+                                    <td>{{product.category.name}}</td>
+                                    <td>{{product.quantity}}</td>
+                                    <td>{{product.price}}</td>
+                                    <td>
+                                        {% if product.image %}
+                                            <img src="{{absolute_url('uploads/'~product.image)}}"
+                                                width="60" height="60"
+                                                alt="{{product.name}}" 
+                                                class="fluid my-2 rounded">
+                                        {% else %}
+                                            <img src="{{absolute_url('uploads/flowers.png')}}"
+                                                width="60" height="60"
+                                                alt="{{product.name}}" 
+                                                class="fluid my-2 rounded">
+                                        {% endif %}
+                                    </td>
+                                    <td class="d-flex justify-content-around align-items-center">
+                                        <a href="{{path('product_show',{id: product.id})}}" class="btn btn-sm btn-dark">
+                                            show
+                                        </a>
+                                        <a href="{{path('product_edit',{id: product.id})}}" class="btn btn-sm btn-warning">
+                                            edit
+                                        </a>
+                                        <form id="{{product.id}}" action="{{path('product_delete',{id: product.id})}}"
+                                            method="post"></form>
+                                        <button onclick="deleteItem('{{product.id}}')" class="btn btn-sm btn-danger">
+                                            delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
